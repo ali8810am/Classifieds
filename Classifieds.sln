@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Classifieds.Web", "Classifieds.Web\Classifieds.Web.csproj", "{D75D8149-E329-4169-8001-CCBB737E7D90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Classifieds.Data", "Classified.Data\Classifieds.Data.csproj", "{FECE2CB7-487C-4529-8E59-F500CE8051F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D75D8149-E329-4169-8001-CCBB737E7D90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D75D8149-E329-4169-8001-CCBB737E7D90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D75D8149-E329-4169-8001-CCBB737E7D90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D75D8149-E329-4169-8001-CCBB737E7D90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECE2CB7-487C-4529-8E59-F500CE8051F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECE2CB7-487C-4529-8E59-F500CE8051F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECE2CB7-487C-4529-8E59-F500CE8051F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECE2CB7-487C-4529-8E59-F500CE8051F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6EF0D40A-CBAE-4880-A8CA-898961714443}
+	EndGlobalSection
+EndGlobal
