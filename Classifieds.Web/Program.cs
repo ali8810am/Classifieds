@@ -1,13 +1,24 @@
 using Classifieds.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddMvcOptions(q => q.Filters.Add(new AuthorizeFilter()));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
-
+builder.Services.AddAuthentication(o =>
+    {
+        o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        ////o.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
+    })
+    .AddCookie(q => q.LoginPath = "/Auth/Login")
+    .AddGoogle(o => { o.ClientId = builder.Configuration["Google:ClientId"]; o.ClientSecret = builder.Configuration["Google:ClientSecret"]; });
+////.AddTwitter(o => { o.ConsumerKey = ""; o.ConsumerSecret = ""; })
+////.AddFacebook(o => { o.ClientId = ""; o.ClientSecret = ""; })
+////.AddMicrosoftAccount(o => { o.ClientId = ""; o.ClientSecret = ""; });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
