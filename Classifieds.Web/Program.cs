@@ -1,5 +1,9 @@
 using Classifieds.Data;
+using Classifieds.Data.Entities;
+using Classifieds.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +13,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages().AddMvcOptions(q => q.Filters.Add(new AuthorizeFilter()));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
+builder.Services.AddDefaultIdentity<User>(option =>
+    {
+        option.Password.RequireDigit = true;
+        option.Password.RequireLowercase = true;
+        option.Password.RequireUppercase = true;
+        option.Password.RequiredLength = 7;
+        option.SignIn.RequireConfirmedAccount = true;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddPasswordValidator<PasswordValidator>();
+
 builder.Services.AddAuthentication(o =>
     {
         o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -19,6 +34,9 @@ builder.Services.AddAuthentication(o =>
 ////.AddTwitter(o => { o.ConsumerKey = ""; o.ConsumerSecret = ""; })
 ////.AddFacebook(o => { o.ClientId = ""; o.ClientSecret = ""; })
 ////.AddMicrosoftAccount(o => { o.ClientId = ""; o.ClientSecret = ""; });
+
+
+builder.Services.AddTransient<IEmailSender, EmailSender>(s=>new EmailSender("Localhost",25,"sssss@gmail.com"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +52,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
