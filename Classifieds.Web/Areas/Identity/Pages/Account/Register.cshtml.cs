@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Classifieds.Data;
 using Classifieds.Data.Entities;
+using Classifieds.Web.Constants;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +30,7 @@ namespace Classifieds.Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
@@ -41,6 +43,7 @@ namespace Classifieds.Web.Areas.Identity.Pages.Account
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager,
             ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -50,6 +53,7 @@ namespace Classifieds.Web.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _roleManager=roleManager;
         }
 
         /// <summary>
@@ -146,6 +150,11 @@ namespace Classifieds.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    var roleExist =await _roleManager.RoleExistsAsync(Roles.Admin);
+                    if (roleExist == false)
+                        await _roleManager.CreateAsync(new IdentityRole(Roles.Admin));
+                    await _userManager.AddToRoleAsync(user, Roles.Admin);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

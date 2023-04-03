@@ -1,7 +1,9 @@
 using Classifieds.Data;
 using Classifieds.Data.Entities;
 using Classifieds.Web.Services;
+using Classifieds.Web.Services.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -10,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages().AddMvcOptions(q => q.Filters.Add(new AuthorizeFilter()));
+builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
@@ -27,8 +29,10 @@ builder.Services.AddDefaultIdentity<User>(option =>
         option.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(10);
         option.Lockout.MaxFailedAccessAttempts = 5;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddPasswordValidator<PasswordValidator>();
+    .AddPasswordValidator<PasswordValidator>()
+    .AddClaimsPrincipalFactory<CustomClaimsService>();
 
 //builder.Services.AddAuthentication(o =>
 //    {
@@ -41,7 +45,10 @@ builder.Services.AddDefaultIdentity<User>(option =>
 //////.AddFacebook(o => { o.ClientId = ""; o.ClientSecret = ""; })
 //////.AddMicrosoftAccount(o => { o.ClientId = ""; o.ClientSecret = ""; });
 
-
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder().Build();
+});
 builder.Services.AddTransient<IEmailSender, EmailSender>(s=>new EmailSender("Localhost",25,"sssss@gmail.com"));
 var app = builder.Build();
 
