@@ -4,12 +4,12 @@
     @if (User.Identity.IsAuthenticated)
     {
         <li class="nav-item" >
-            <a class="nav-link btn btn-link">
+            <a asp-area="Identity" asp-page="/account/manage/index" class="nav-link btn btn-link">
                 Welcome @User.Identity.Name!
             </a>
         </li>
         <li class="nav-item">
-            <a asp-page="/Auth/Logout" class="nav-link btn btn-link ">
+            <a asp-area="Identity" asp-page="/account/logout" class="nav-link btn btn-link ">
                 Logout
             </a>
         </li>
@@ -17,12 +17,12 @@
     else
     {
         <li class="nav-item">
-            <a asp-page="/identity/account/register" class="nav-link">
+            <a asp-area="Identity" asp-page="/account/register" class="nav-link">
                 Register
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-page="/Auth/Login">
+            <a class="nav-link" asp-area="Identity" asp-page="/account/login">
                 Login
             </a>
         </li>
