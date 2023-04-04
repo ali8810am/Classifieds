@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
@@ -34,22 +34,20 @@ builder.Services.AddDefaultIdentity<User>(option =>
     .AddPasswordValidator<PasswordValidator>()
     .AddClaimsPrincipalFactory<CustomClaimsService>();
 
-//builder.Services.AddAuthentication(o =>
-//    {
-//        o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//        ////o.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
-//    })
-//    .AddCookie(q => q.LoginPath = "/Auth/Login")
-//    .AddGoogle(o => { o.ClientId = builder.Configuration["Google:ClientId"]; o.ClientSecret = builder.Configuration["Google:ClientSecret"]; });
+builder.Services.AddAuthentication()
+    .AddCookie(q => q.LoginPath = "/Auth/Login")
+    .AddGoogle(o => { o.ClientId = builder.Configuration["Google:ClientId"]; o.ClientSecret = builder.Configuration["Google:ClientSecret"]; });
 //////.AddTwitter(o => { o.ConsumerKey = ""; o.ConsumerSecret = ""; })
 //////.AddFacebook(o => { o.ClientId = ""; o.ClientSecret = ""; })
 //////.AddMicrosoftAccount(o => { o.ClientId = ""; o.ClientSecret = ""; });
 
+builder.Services.AddTransient<IEmailSender, EmailSender>(s=>new EmailSender("Localhost",25,"sssss@gmail.com"));
+
 builder.Services.AddAuthorization(options =>
 {
-    options.FallbackPolicy = new AuthorizationPolicyBuilder().Build();
+    options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 });
-builder.Services.AddTransient<IEmailSender, EmailSender>(s=>new EmailSender("Localhost",25,"sssss@gmail.com"));
+builder.Services.AddRazorPages();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
