@@ -1,0 +1,15 @@
+﻿@page
+@model Classifieds.Web.Areas.Identity.Pages.Account.ResendEmailModel
+@{
+}
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+<p>
+    <strong>Error Sending Email.</strong>
+    we cant send email. you can try again.You can also leave this page and sign in
+</p>
+<form method="post">
+    <input asp-for="EmailVm.Email" type="hidden"/>
+    <input asp-for="EmailVm.CallbackUrl" type="hidden" />
+    <button type="submit">Send Email</button>
+</form>

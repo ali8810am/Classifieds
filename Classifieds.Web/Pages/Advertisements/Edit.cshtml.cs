@@ -47,6 +47,7 @@ namespace Classifieds.Web.Pages.Advertisements
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
                 return Page();
             }
 
